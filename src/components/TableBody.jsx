@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TableRow from './TableRow';
+import TableFooter from './TableFooter.jsx';
 
 export default function TableBody() {
   const API_KEY = '9a0013c808msh18c4d0d0abefb0fp1b1c1ajsnbde9fbcb0b68';
@@ -11,8 +12,15 @@ export default function TableBody() {
     },
   };
 
-  const [rowData, setRowData] = useState([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]);
+  const [rowData, setRowData] = useState([{}, {},]);
   const [tickerSymbols, setTickerSymbols] = useState([]);
+  const [allocations, setAllocations] = useState([])
+  
+  const footerObj = {
+    divYiel: [],
+    cagr: [],
+    divGrowthRate: []
+  };
   
   const date = new Date();
   let currentDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -26,6 +34,12 @@ export default function TableBody() {
     if (newTicker.length === 4) {
       getStockData(rowIndex, newTicker);
     }
+  }
+
+  function updateAllocation(rowIndex, newAllocation) {
+    const copyArr = [...allocations];
+    copyArr.splice(rowIndex, 1, newAllocation);
+    setAllocations(copyArr);
   }
 
   async function getStockData(rowIndex, tickerSymbol) {
@@ -78,16 +92,40 @@ export default function TableBody() {
 
   return (
     <>
-      {rowData.map((row, rowIndex) => {
-        return (
-          <TableRow
-            key={rowIndex}
-            row={row}
-            tickerSymbol={tickerSymbols[rowIndex]}
-            updateTickerList={(newTicker) => updateTickerSymbol(rowIndex, newTicker)}
-          />
-        );
-      })}
+      <h1>Stock Portfolio Builder</h1>
+      <div className="table-container">
+        <table>
+          <caption>Disclaimer: Past Performance is Not Indicative of Future Results</caption>
+          <thead>
+            <tr>
+              <th>(%) Allocation</th>
+              <th>Ticker Symbol</th>
+              <th>Stock Name</th>
+              <th>Last Price</th>
+              <th>Dividend Yield</th>
+              <th>Payout Months</th>
+              <th>Dividend Growth</th>
+              <th>5Y CAGR</th>
+              <th>5Y Dividend Growth Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rowData.map((row, rowIndex) => {
+              return (
+                <TableRow
+                  key={rowIndex}
+                  row={row}
+                  tickerSymbol={tickerSymbols[rowIndex]}
+                  allocationAmount={allocations[rowIndex]}
+                  updateTickerList={(newTicker) => updateTickerSymbol(rowIndex, newTicker)}
+                  updateAllocation={(newAllocation) => {updateAllocation(rowIndex, newAllocation)}}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+        <TableFooter allocations={allocations} rowData={rowData}/>
+      </div>
     </>
   );
 }

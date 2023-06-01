@@ -14,6 +14,7 @@ body {
 .table-footer {
   display: flex;
   justify-content: space-around;
+  font-weight: bold;
 }
 
 table {
@@ -93,8 +94,6 @@ tr:nth-of-type(2n) {
   }
 
   .table-footer {
-    border: 1px solid white;
-    display: flex;
     flex-direction: column;
   }
 } 

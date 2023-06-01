@@ -1,8 +1,6 @@
 import { getPayOutMonths, get5YCAGR, getDivYield, getDivGrowthYears, getLastPrice, getDivGrowthRate} from '../helpers/TableRow.helper.js';
 
-export default function TableRow({ row, updateTickerList}) {
-  console.log('row:', row);
-  
+export default function TableRow({row, updateTickerList, updateAllocation}) {
   let data = false;
   if (row.stockName && row.lastPrice) {
     data = true;
@@ -24,7 +22,9 @@ export default function TableRow({ row, updateTickerList}) {
     <tr>
       <td data-cell={dataCelldata[0]}>
         <div className="input-wrapper">
-          <input type="text"/>
+          <input type="text" onChange={(ev) =>
+          updateAllocation(ev.target.value)
+          }/>
         </div>
       </td>
       <td data-cell={dataCelldata[1]}>
