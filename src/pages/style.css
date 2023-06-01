@@ -2,14 +2,18 @@ html {color-scheme: dark}
 
 body {
   color: #eee;
-  font-size: 1.125rem;
+  font-size: .90rem;
   font-family: system-ui;
   line-height: 1.5;
 }
 
 .wrapper {
-  border: 1px solid red;
   text-align: center;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-around;
 }
 
 table {
@@ -20,7 +24,7 @@ table {
 
 input {
   text-align: center;
-  font-size: 1.25rem;
+  font-size: .90rem;
 }
 
 th, td, caption {
@@ -33,7 +37,7 @@ caption, th {
 
 caption {
   background: hsl(0 0% 0%);
-  font-size: 1.5rem;
+  font-size: .65rem;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -52,11 +56,25 @@ tr:nth-of-type(2n) {
     display: none;
   }
 
+  input {
+    min-width: 215px;
+    min-height: 20px;
+  }
+
+  .item-wrapper {
+    min-width: 220px;
+    min-height: 30px;
+  }
+
+  #stockName {
+    max-width: 220px;
+  }
+
   td {
     display: grid;
-    gap: 0.5rem;
     justify-content: center;
-    grid-template-columns: 25ch auto;
+    align-items: center;
+    grid-template-columns: 20ch auto;
     padding: 0.5rem 1rem;
   }
 
@@ -74,7 +92,9 @@ tr:nth-of-type(2n) {
     justify-self: start;
   }
 
-  input {
-    padding-right: 45px;
+  .table-footer {
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
   }
 } 
