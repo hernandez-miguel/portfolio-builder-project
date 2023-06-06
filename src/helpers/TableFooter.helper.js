@@ -15,7 +15,7 @@ export function getPortfolioDivyield(allocations, rowData) {
   for(let i = 0; i < allocations.length; i++) {
     let allocationPercent = Number(allocations[i]) / 100;
 
-    if (allocationPercent > 0 && rowData[i].divYield) {
+    if (allocationPercent > 0 && (rowData[i].divYield !== 'N/A' || !rowData[i])) {
       total += allocationPercent * rowData[i].divYield;
     }
   }
@@ -30,7 +30,7 @@ export function getPortfolioExpectedReturn(allocations, rowData) {
     let cagrStr = get5YCAGR(rowData[i].divHistory, rowData[i].historicalPrices, rowData[i].lastPrice);
     let allocationPercent = Number(allocations[i]) / 100;
 
-    if (allocationPercent > 0 && cagrStr !== 'N/A') {
+    if (allocationPercent > 0 && (cagrStr !== 'N/A' || !cagrStr)) {
       let cagrNum = Number(cagrStr.slice(0, -1));
         total += allocationPercent * cagrNum;
     }
@@ -46,7 +46,7 @@ export function getPortfolioDivGrowth(allocations, rowData) {
     let dgrStr = getDivGrowthRate(rowData[i].divHistory, rowData[i].divRate);
     let allocationPercent = Number(allocations[i]) / 100;
 
-    if (allocationPercent > 0 && dgrStr !== 'N/A') {
+    if (allocationPercent > 0 && (dgrStr !== 'N/A' || !dgrStr)) {
       let dgrNum = Number(dgrStr.slice(0, -1));
       total += allocationPercent * dgrNum;
     }

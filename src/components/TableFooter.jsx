@@ -1,19 +1,25 @@
 import { getTotalAllocations, getPortfolioDivyield, getPortfolioExpectedReturn, getPortfolioDivGrowth} from "../helpers/TableFooter.helper"
 
-export default function TableFooter({allocations, rowData}) {
-  
+export default function TableFooter({allocations, rowData, setRowData}) {
   const totalAllocations = getTotalAllocations(allocations);
-  console.log(totalAllocations, typeof totalAllocations);
 
   return (
     <>
      <div className="table-footer">
+      <div className="buttons">
+        <button onClick={() => {setRowData([...rowData, ...Array(10).fill({})])}}>
+          Add 10 Rows
+        </button>
+        <button>
+          Get Portfolio Data
+        </button>
+      </div>
       <p>Total Allocation: {totalAllocations}% of 100%</p>
       <p>Portfolio Div Yield: {
-        totalAllocations === 100 ?  getPortfolioDivyield(allocations, rowData) 
+        totalAllocations === 100 ? getPortfolioDivyield(allocations, rowData) 
         : ''}
       </p>
-      <p>Portfolio Expected Return: {
+      <p>Portfolio CAGR: {
         totalAllocations === 100? getPortfolioExpectedReturn(allocations, rowData)
         : ''}
       </p>

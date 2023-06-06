@@ -13,7 +13,7 @@ body {
 
 .table-footer {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   font-weight: bold;
 }
 
@@ -26,6 +26,7 @@ table {
 input {
   text-align: center;
   font-size: .90rem;
+  text-transform: uppercase;
 }
 
 th, td, caption {
@@ -43,16 +44,31 @@ caption {
   text-transform: uppercase;
 }
 
+.buttons {
+  width: 20%;
+  display: flex;
+  gap: 1.5rem;
+}
+
+button {
+  background: #D21312;
+  font-weight: bold;
+  margin-top: 5px;
+  border: none;
+  width: 50%;
+  font-size: .75rem;
+}
+
+button:hover{
+  box-shadow: 0 5px 15px #D21312;
+}
+
 th {
   background-color: hsl(0 0% 0% / 0.5);
   text-align: center;
 }
 
-tr:nth-of-type(2n) {
-  background: hsl(0 0% 0% / 0.1);
-}
-
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   th {
     display: none;
   }
@@ -95,5 +111,15 @@ tr:nth-of-type(2n) {
 
   .table-footer {
     flex-direction: column;
+  }
+
+  .buttons {
+   width: 100%;
+  }
+
+  button {
+    height: 35px;
+    width: 50%;
+    margin-top: 5px;
   }
 } 
