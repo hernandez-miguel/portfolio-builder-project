@@ -11,6 +11,10 @@ body {
   text-align: center;
 }
 
+.table-container {
+  overflow-x: auto;
+}
+
 .table-footer {
   display: flex;
   justify-content: space-between;
@@ -44,19 +48,12 @@ caption {
   text-transform: uppercase;
 }
 
-.buttons {
-  width: 20%;
-  display: flex;
-  gap: 1.5rem;
-}
-
 button {
   background: #D21312;
   font-weight: bold;
   margin-top: 5px;
   border: none;
-  width: 50%;
-  font-size: .75rem;
+  width: 15%;
 }
 
 button:hover{
@@ -68,7 +65,7 @@ th {
   text-align: center;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 650px) {
   th {
     display: none;
   }
@@ -113,13 +110,9 @@ th {
     flex-direction: column;
   }
 
-  .buttons {
-   width: 100%;
-  }
-
   button {
     height: 35px;
-    width: 50%;
+    width: 100%;
     margin-top: 5px;
   }
 } 

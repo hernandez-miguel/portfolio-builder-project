@@ -6,15 +6,10 @@ export default function TableFooter({allocations, rowData, setRowData}) {
   return (
     <>
      <div className="table-footer">
-      <div className="buttons">
         <button onClick={() => {setRowData([...rowData, ...Array(10).fill({})])}}>
           Add 10 Rows
         </button>
-        <button>
-          Get Portfolio Data
-        </button>
-      </div>
-      <p>Total Allocation: {totalAllocations}% of 100%</p>
+      <p>Allocation: {totalAllocations}% of 100%</p>
       <p>Portfolio Div Yield: {
         totalAllocations === 100 ? getPortfolioDivyield(allocations, rowData) 
         : ''}

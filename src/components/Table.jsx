@@ -3,7 +3,7 @@ import TableRow from './TableRow';
 import TableFooter from './TableFooter.jsx';
 import { getCurrentDate, getHistoricalDate } from '../helpers/Table.helper';
 
-export default function TableBody() {
+export default function Table() {
   const API_KEY = import.meta.env.VITE_API_KEY;
 
   const controller = new AbortController();
@@ -135,7 +135,6 @@ export default function TableBody() {
     <>
       <h1>Stock Portfolio Builder</h1>
       <div className="table-container">
-        <form action="">
         <table>
           <caption>
             Disclaimer: Past Performance is Not Indicative of Future Results
@@ -174,13 +173,12 @@ export default function TableBody() {
             })}
           </tbody>
         </table>
-        </form>
-        <TableFooter
-          allocations={allocations}
-          rowData={rowData}
-          setRowData={setRowData}
-        />
       </div>
+      <TableFooter
+        allocations={allocations}
+        rowData={rowData}
+        setRowData={setRowData}
+      />
     </>
   );
 }
