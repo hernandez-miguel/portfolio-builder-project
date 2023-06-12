@@ -2,7 +2,7 @@ html {color-scheme: dark}
 
 body {
   color: #eee;
-  font-size: .90rem;
+  font-size: .85rem;
   font-family: system-ui;
   line-height: 1.5;
 }
@@ -11,33 +11,53 @@ body {
   text-align: center;
 }
 
-.table-container {
-  overflow-x: auto;
-}
-
-.table-footer {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-}
-
 table {
   width: 100%;  
   border-collapse: collapse;
   background: #323232;
 }
 
+.table-container {
+  overflow-x: auto;
+  position: relative;
+}
+
+.input-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.input-container > form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-around;
+  font-weight: bold;
+}
+
 input {
+  width: 150px;
+  height: 25px;
   text-align: center;
-  font-size: .90rem;
   text-transform: uppercase;
+  border: none;
+  font-weight: 700;
+  background-color: #323232;
+}
+
+input:focus{
+  background-color: #323232;
 }
 
 th, td, caption {
   padding: 1rem;
 }
 
-caption, th {
+caption {
   text-align: left;
 }
 
@@ -50,14 +70,18 @@ caption {
 
 button {
   background: #D21312;
-  font-weight: bold;
-  margin-top: 5px;
   border: none;
-  width: 15%;
+  height: 25px;
+  width: 20%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
 }
 
-button:hover{
-  box-shadow: 0 5px 15px #D21312;
+.remove-button > button{
+  width: 100%;
 }
 
 th {
@@ -65,14 +89,13 @@ th {
   text-align: center;
 }
 
+tr:nth-of-type(2n) {
+  background: hsl(0 0% 0% / 0.1);;
+}
+
 @media (max-width: 650px) {
   th {
     display: none;
-  }
-
-  input {
-    min-width: 215px;
-    min-height: 20px;
   }
 
   .item-wrapper {
@@ -98,21 +121,19 @@ th {
 
   td:last-child {
     padding-bottom: 2rem;
+    content: none;
   }
 
   td::before {
-    content: attr(data-cell) ": ";
+    content: attr(data-cell);
     font-weight: 700;
     justify-self: start;
+    text-align: left;
   }
 
   .table-footer {
     flex-direction: column;
   }
 
-  button {
-    height: 35px;
-    width: 100%;
-    margin-top: 5px;
-  }
+ 
 } 

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import TablePage from './pages/table.pages';
 import './App.css';
 

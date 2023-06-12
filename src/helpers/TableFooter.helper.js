@@ -1,37 +1,30 @@
-import { get5YCAGR, getDivGrowthRate } from "./TableRow.helper";
-
-export function getTotalAllocations(allocations) {
-
-  const totalAllocations = allocations.reduce((acc, curr) => {
-    if (curr) return Number(acc) + Number(curr);
-    return acc;
-  }, 0)
-  return totalAllocations;
+export function getTotalAllocations(rowData) {
+  let total = 0;
+  for (let i = 0; i < rowData.length; i++){
+    total += rowData[i].allocation;
+  }
+  return total;
 }
 
-export function getPortfolioDivyield(allocations, rowData) {
+export function getPortfolioDivyield(rowData) {
   let total = 0;
 
-  for(let i = 0; i < allocations.length; i++) {
-    let allocationPercent = Number(allocations[i]) / 100;
-
-    if (allocationPercent > 0 && (rowData[i].divYield !== 'N/A' || !rowData[i])) {
-      total += allocationPercent * rowData[i].divYield;
-    }
+  for(let i = 0; i < rowData.length; i++) {
+    let allocationPercent = Number(rowData[i].allocation) / 100;
+    const divYieldNum = Number(rowData[i].divYield.slice(0, -1));
+    total += allocationPercent * divYieldNum;
   }
 
   return total.toFixed(2) + '%';
 }
 
-export function getPortfolioExpectedReturn(allocations, rowData) {
+export function getPortfolioExpectedReturn(rowData) {
   let total = 0;
   
-  for(let i = 0; i < allocations.length; i++) {
-    let cagrStr = get5YCAGR(rowData[i].divHistory, rowData[i].historicalPrices, rowData[i].lastPrice);
-    let allocationPercent = Number(allocations[i]) / 100;
-
-    if (allocationPercent > 0 && (cagrStr !== 'N/A' || !cagrStr)) {
-      let cagrNum = Number(cagrStr.slice(0, -1));
+  for(let i = 0; i < rowData.length; i++) {
+    let allocationPercent = Number(rowData[i].allocation) / 100;
+    if (allocationPercent > 0) {
+      let cagrNum = Number(rowData[i].cagr5Years.slice(0, -1));
         total += allocationPercent * cagrNum;
     }
   }
@@ -39,15 +32,13 @@ export function getPortfolioExpectedReturn(allocations, rowData) {
   return total.toFixed(2) + '%';
 }
 
-export function getPortfolioDivGrowth(allocations, rowData) {
+export function getPortfolioDivGrowth(rowData) {
   let total = 0;
 
-  for (let i = 0; i < allocations.length; i++) {
-    let dgrStr = getDivGrowthRate(rowData[i].divHistory, rowData[i].divRate);
-    let allocationPercent = Number(allocations[i]) / 100;
-
-    if (allocationPercent > 0 && (dgrStr !== 'N/A' || !dgrStr)) {
-      let dgrNum = Number(dgrStr.slice(0, -1));
+  for (let i = 0; i < rowData.length; i++) {
+    let allocationPercent = Number(rowData[i].allocation) / 100;
+    if (allocationPercent > 0) {
+      let dgrNum = Number(rowData[i].divGrowthRate.slice(0, -1));
       total += allocationPercent * dgrNum;
     }
   }
