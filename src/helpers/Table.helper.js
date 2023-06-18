@@ -33,31 +33,27 @@ export function useDebounceValue(value, time = 250) {
 }
 
 export function getDivYield(divYield) {
-  return divYield ? divYield + '%': '-'; 
+  return divYield ? (divYield * 100).toFixed(2) + '%': '-'; 
 }
 
 export function getPayoutRatio(payoutRatio) {
-  return payoutRatio ? payoutRatio.toFixed(2) + '%': '-';
-}
-
-export function getDivGrowthYears(divGrowth) {
-  return divGrowth ? divGrowth + ' Years': '-';
+  return payoutRatio ? (payoutRatio * 100).toFixed(2) + '%': '-';
 }
 
 export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
-  if (divHistory.length === 6 && historicalPrices.length >= 1250) {
+  if (divHistory.length >= 20 && historicalPrices.length >= 1250) {
     const totalDivRecieved = divHistory.reduce((acc, currentValue) => {
-    return acc += currentValue.attributes.adjusted_amount; 
+    return acc += currentValue.value; 
     }, 0)
 
-    const startPrice = historicalPrices[0].attributes.close;
+    const startPrice = historicalPrices[0].adjusted_close;
     const endPrice = lastPrice + totalDivRecieved;
     const annualizedRoR = ((Math.pow((endPrice / startPrice), 1/5) - 1) * 100).toFixed(2) + '%';
     return annualizedRoR;
   } 
 
   if (historicalPrices.length >= 1250) {
-    const startPrice = historicalPrices[0].attributes.close;
+    const startPrice = historicalPrices[0].adjusted_close;
     const endPrice = lastPrice;
     const annualizedRoR = ((Math.pow((endPrice / startPrice), 1/5) - 1) * 100).toFixed(2) + '%';
     return annualizedRoR;
@@ -67,13 +63,25 @@ export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
 }
 
 export function getDivGrowthRate(divHistory, annualPayout) {
-  if (divHistory.length !== 6) {
+  if (divHistory.length < 20 || !annualPayout) {
     return '-';
   }
-  
-  const startingDivAmount = divHistory[0].attributes.adjusted_amount;
+
+  let startingDivAmount = 0;
+
+  if(divHistory.length === 20) {
+    for(let i = 0; i < 4; i++) {
+      startingDivAmount += divHistory[i].value;
+    }
+  }
+
+  if(divHistory.length === 60) {
+    for(let i = 0; i < 12; i++) {
+      startingDivAmount += divHistory[i].value; 
+    }
+  }
+
   const endingDivAmount = annualPayout;
   const dividendGrowthRate = ((Math.pow((endingDivAmount / startingDivAmount), 1/5) - 1) * 100).toFixed(2) + '%';
-
   return dividendGrowthRate;
 }

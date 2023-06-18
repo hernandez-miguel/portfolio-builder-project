@@ -14,12 +14,13 @@ export default function TableRow({row, setRowData, assetNum}) {
     'Allocation (%):',
     'Ticker Symbol:',
     'Stock Name:',
-    'Last Price:',
+    'Last Price (Delayed):',
+    'Change:',
+    'Change (%):',
     'Dividend Yield:',
     'Payout Ratio:',
-    'Dividend Growth:',
-    '5Y CAGR:',
     '5Y Dividend Growth Rate:',
+    '5Y CAGR:',
   ];
 
   return (
@@ -60,27 +61,32 @@ export default function TableRow({row, setRowData, assetNum}) {
       </td>
       <td data-cell={dataCelldata[6]}>
         <div className="item-wrapper">
-          {row.divYield}
+          {row.change}
         </div>
       </td>
       <td data-cell={dataCelldata[7]}>
         <div className="item-wrapper">
-          {row.payoutRatio}
+          {row.changePercent}
         </div>
       </td>
       <td data-cell={dataCelldata[8]}>
         <div className="item-wrapper">
-          {row.divGrowthYears}
+          {row.divYield}
         </div>
       </td>
       <td data-cell={dataCelldata[9]}>
         <div className="item-wrapper">
-          {row.cagr5Years}
+          {row.payoutRatio}
         </div>
       </td>
       <td data-cell={dataCelldata[10]}>
         <div className="item-wrapper">
           {row.divGrowthRate}
+        </div>
+      </td>
+      <td data-cell={dataCelldata[11]}>
+        <div className="item-wrapper">
+          {row.cagr5Years}
         </div>
       </td>
     </tr>

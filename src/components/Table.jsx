@@ -3,25 +3,25 @@ import TableRow from './TableRow';
 import TableFooter from './TableFooter.jsx';
 import Modal from './modal';
 import { getCurrentDate, getHistoricalDate, getDivYield} from '../helpers/Table.helper';
-import { getDivGrowthYears, getPayoutRatio} from '../helpers/Table.helper';
+import { getPayoutRatio} from '../helpers/Table.helper';
 import { get5YCAGR, getDivGrowthRate, errorTypeObj } from '../helpers/Table.helper';
 import { getTotalAllocations } from '../helpers/TableFooter.helper';
 import {Oval} from 'react-loader-spinner';
 
+const date = new Date();
+const currentDate = getCurrentDate(date);
+const historicalDate = getHistoricalDate(date, 5);
+
 export default function Table() {
   const API_KEY = import.meta.env.VITE_API_KEY;
-  const controller = new AbortController();
-
+  
   const [rowData, setRowData] = useState([]);
   const [ticker, setTicker] = useState('');
   const [allocation, setAllocation] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [errorType, setErrorType] = useState(errorTypeObj);
   const [loading, setLoading] = useState(false);
-
-  const date = new Date();
-  const currentDate = getCurrentDate(date);
-  const historicalDate = getHistoricalDate(date, 5);
+  
   const totalAllocations = getTotalAllocations(rowData);
 
   function loadingSpinner(loading) {
@@ -104,52 +104,52 @@ export default function Table() {
     }
 
     async function getStockData(tickerSymbol) {
-      const options = {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': API_KEY,
-          'X-RapidAPI-Host': 'seeking-alpha.p.rapidapi.com',
-        },
-        signal: controller.signal,
-      };
-
-      const urlProfile = `https://seeking-alpha.p.rapidapi.com/symbols/get-profile?symbols=${tickerSymbol}`;
-      const urlSummary = `https://seeking-alpha.p.rapidapi.com/symbols/get-summary?symbols=${tickerSymbol}`;
-      const urlDivHistory = `https://seeking-alpha.p.rapidapi.com/symbols/get-dividend-history?symbol=${tickerSymbol}&years=5&group_by=year`;
-      const urlHistoricalPrices = `https://seeking-alpha.p.rapidapi.com/symbols/get-historical-prices?symbol=${tickerSymbol}&start=${historicalDate}&end=${currentDate}&show_by=day&sort=as_of_date`;
+      const urlFundamentalData = `https://eodhistoricaldata.com/api/fundamentals/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
+      const urlDelayedPrice = `https://eodhistoricaldata.com/api/real-time/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
+      const urlDivHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`
+      const urlHistoricalPrices = `https://eodhistoricaldata.com/api/eod/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`;
+      
       
       try {
-        const firstResponse = await fetch(urlProfile, options);
-        const stockProfileData = await firstResponse.json();
+        const firstResponse = await fetch(urlFundamentalData);
+        const stockFundamentalData = await firstResponse.json();
+        
+        console.log(stockFundamentalData);
 
-        const companyName = stockProfileData.data[0].attributes.companyName;
-
-        if (companyName) {
-          const secondResponse = await fetch(urlSummary, options);
-          const stockSummaryData = await secondResponse.json();
-          const thirdResponse = await fetch(urlDivHistory, options);
+        const stockName = stockFundamentalData.General.Name;
+        const stockType =  stockFundamentalData.General.Type;
+        
+        if (stockName && stockType === 'Common Stock') {
+          const secondResponse = await fetch(urlDelayedPrice);
+          const stockDelayedPrice = await secondResponse.json();
+          const thirdResponse = await fetch(urlDivHistory);
           const stockDividendHitory = await thirdResponse.json();
-          const fourthResponse = await fetch(urlHistoricalPrices, options);
+          const fourthResponse = await fetch(urlHistoricalPrices);
           const stockHistoricalPrices = await fourthResponse.json();   
+
+          console.log(stockDividendHitory);
+          console.log(stockHistoricalPrices);
           
-          const lastPrice = stockProfileData.data[0].attributes.lastDaily.last;
-          const divYield =  stockProfileData.data[0].attributes.divYield;
-          const payoutRatio = stockSummaryData.data[0].attributes.payoutRatio;
-          const divGrowthYears = stockSummaryData.data[0].attributes.dividendGrowth;
-          const annualPayout = stockSummaryData.data[0].attributes.divRate;
-          const divHistory = stockDividendHitory.data;
-          const historicalPrices = stockHistoricalPrices.data;
+          const lastPrice = stockDelayedPrice.close;
+          const change = stockDelayedPrice.change.toFixed(2);
+          const changePercent = stockDelayedPrice.change_p.toFixed(2) + '%';
+          const divYield = stockFundamentalData.SplitsDividends.ForwardAnnualDividendYield;
+          const payoutRatio = stockFundamentalData.SplitsDividends.PayoutRatio;
+          const annualPayout = stockFundamentalData.SplitsDividends.ForwardAnnualDividendRate;
+          const divHistory = stockDividendHitory;
+          const historicalPrices = stockHistoricalPrices
 
           setRowData((prevData) => {
             const copyState = [...prevData];
             return([...copyState, {
               ticker: ticker, 
               allocation: Number(allocation),
-              name: companyName,
+              name: stockName,
               lastPrice: lastPrice,
+              change: change,
+              changePercent: changePercent,
               divYield: getDivYield(divYield),
               payoutRatio: getPayoutRatio(payoutRatio),
-              divGrowthYears: getDivGrowthYears(divGrowthYears, annualPayout),
               cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
               divGrowthRate: getDivGrowthRate(divHistory, annualPayout)
             }]);
@@ -208,12 +208,13 @@ export default function Table() {
               <th>Allocation (%)</th>
               <th>Ticker Symbol</th>
               <th>Stock Name</th>
-              <th>Last Price</th>
+              <th>Last Price (Delayed)</th>
+              <th>Change</th>
+              <th>Change (%)</th>
               <th>Dividend Yield</th>
               <th>Payout Ratio</th>
-              <th>Dividend Growth</th>
-              <th>5Y CAGR</th>
               <th>5Y Dividend Growth Rate</th>
+              <th>5Y CAGR</th>
             </tr>
           </thead>
           <tbody>

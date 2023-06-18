@@ -24,12 +24,12 @@ export default function TableFooter({rowData}) {
         totalAllocations === 100 ? getPortfolioDivyield(rowData) 
         : ''}
       </p>
-      <p>Portfolio CAGR: {
-        totalAllocations === 100? getPortfolioExpectedReturn(rowData)
-        : ''}
-      </p>
       <p>Portfolio Div Growth Rate: {
         totalAllocations === 100 ? getPortfolioDivGrowth(rowData)
+        : ''}
+      </p>
+      <p>Portfolio CAGR: {
+        totalAllocations === 100? getPortfolioExpectedReturn(rowData)
         : ''}
       </p>
      </div>
