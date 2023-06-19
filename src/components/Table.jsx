@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import TableRow from './TableRow';
 import TableFooter from './TableFooter.jsx';
 import Modal from './modal';
-import { getCurrentDate, getHistoricalDate, getDivYield} from '../helpers/Table.helper';
-import { getPayoutRatio} from '../helpers/Table.helper';
+import { getCurrentDate, getHistoricalDate, getDivYield } from '../helpers/Table.helper';
+import { getPayoutRatio, getStartYear, getEndYear } from '../helpers/Table.helper';
 import { get5YCAGR, getDivGrowthRate, errorTypeObj } from '../helpers/Table.helper';
 import { getTotalAllocations } from '../helpers/TableFooter.helper';
-import {Oval} from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
 const date = new Date();
 const currentDate = getCurrentDate(date);
 const historicalDate = getHistoricalDate(date, 5);
+const startYear = getStartYear(date, 5);
+const endYear = getEndYear(date);
 
 export default function Table() {
   const API_KEY = import.meta.env.VITE_API_KEY;
@@ -106,63 +108,99 @@ export default function Table() {
     async function getStockData(tickerSymbol) {
       const urlFundamentalData = `https://eodhistoricaldata.com/api/fundamentals/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
       const urlDelayedPrice = `https://eodhistoricaldata.com/api/real-time/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
-      const urlDivHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`
+      const urlDivHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${startYear}&to=${endYear}&period=d&fmt=json&&api_token=${API_KEY}`
       const urlHistoricalPrices = `https://eodhistoricaldata.com/api/eod/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`;
       
       
       try {
         const firstResponse = await fetch(urlFundamentalData);
         const stockFundamentalData = await firstResponse.json();
-        
-        console.log(stockFundamentalData);
 
         const stockName = stockFundamentalData.General.Name;
         const stockType =  stockFundamentalData.General.Type;
         
-        if (stockName && stockType === 'Common Stock') {
+        if (stockName) {
           const secondResponse = await fetch(urlDelayedPrice);
           const stockDelayedPrice = await secondResponse.json();
           const thirdResponse = await fetch(urlDivHistory);
           const stockDividendHitory = await thirdResponse.json();
           const fourthResponse = await fetch(urlHistoricalPrices);
           const stockHistoricalPrices = await fourthResponse.json();   
-
-          console.log(stockDividendHitory);
-          console.log(stockHistoricalPrices);
-          
+        
           const lastPrice = stockDelayedPrice.close;
-          const change = stockDelayedPrice.change.toFixed(2);
-          const changePercent = stockDelayedPrice.change_p.toFixed(2) + '%';
-          const divYield = stockFundamentalData.SplitsDividends.ForwardAnnualDividendYield;
-          const payoutRatio = stockFundamentalData.SplitsDividends.PayoutRatio;
-          const annualPayout = stockFundamentalData.SplitsDividends.ForwardAnnualDividendRate;
+          const change = stockDelayedPrice.change;
+          const changePercent = stockDelayedPrice.change_p;
           const divHistory = stockDividendHitory;
           const historicalPrices = stockHistoricalPrices
 
-          setRowData((prevData) => {
-            const copyState = [...prevData];
-            return([...copyState, {
-              ticker: ticker, 
-              allocation: Number(allocation),
-              name: stockName,
-              lastPrice: lastPrice,
-              change: change,
-              changePercent: changePercent,
-              divYield: getDivYield(divYield),
-              payoutRatio: getPayoutRatio(payoutRatio),
-              cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
-              divGrowthRate: getDivGrowthRate(divHistory, annualPayout)
-            }]);
-          });
-        } else {
-          setShowModal(true);
-          setErrorType((prevData) => ({
-            ...prevData,
-            tickerNotFound: true,
-          }))
-          throw new Error (`Ticker symbol (${ticker}) not found`);
+          if(stockType === 'Common Stock') {
+            const divYield = stockFundamentalData.SplitsDividends.ForwardAnnualDividendYield;
+            const payoutRatio = stockFundamentalData.SplitsDividends.PayoutRatio;
+
+            setRowData((prevData) => {
+              const copyState = [...prevData];
+              return([...copyState, {
+                ticker: ticker, 
+                allocation: Number(allocation),
+                name: stockName,
+                lastPrice: lastPrice,
+                change: change,
+                changePercent: changePercent,
+                divYield: getDivYield(divYield),
+                payoutRatio: getPayoutRatio(payoutRatio),
+                cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
+                divGrowthRate: getDivGrowthRate(divHistory)
+              }]);
+            });
+          }
+
+          if(stockType === 'ETF') {
+            const divYield = stockFundamentalData.ETF_Data.Yield;
+
+            setRowData((prevData) => {
+              const copyState = [...prevData];
+              return([...copyState, {
+                ticker: ticker, 
+                allocation: Number(allocation),
+                name: stockName,
+                lastPrice: lastPrice,
+                change: change,
+                changePercent: changePercent,
+                divYield: getDivYield(divYield),
+                payoutRatio: '-',
+                cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
+                divGrowthRate: getDivGrowthRate(divHistory)
+              }]);
+            });
+          }
+          
+          if(stockType === 'FUND') {
+            const divYield = stockFundamentalData.MutualFund_Data.Yield;
+
+            setRowData((prevData) => {
+              const copyState = [...prevData];
+              return([...copyState, {
+                ticker: ticker, 
+                allocation: Number(allocation),
+                name: stockName,
+                lastPrice: lastPrice,
+                change: change,
+                changePercent: changePercent,
+                divYield: getDivYield(divYield),
+                payoutRatio: '-',
+                cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
+                divGrowthRate: getDivGrowthRate(divHistory)
+              }]);
+            });
+          }
         }
       } catch (err) {
+        setShowModal(true);
+        setErrorType((prevData) => ({
+          ...prevData,
+          tickerNotFound: true,
+        }))
+        console.log(`Ticker symbol ${ticker} not found.`)
         console.error(err);
       }
       setLoading(false);

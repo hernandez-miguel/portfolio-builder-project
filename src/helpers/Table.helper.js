@@ -16,6 +16,14 @@ export function getHistoricalDate(date, numYears){
   return`${date.getFullYear() - numYears}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+export function getStartYear(date, numYears) {
+  return `${date.getFullYear() - numYears}-01-01`;
+}
+
+export function getEndYear(date) {
+  return `${date.getFullYear()}-01-01`;
+}
+
 export function useDebounceValue(value, time = 250) {
   const [debounceValue, setDebounceValue] = useState(value);
 
@@ -33,11 +41,11 @@ export function useDebounceValue(value, time = 250) {
 }
 
 export function getDivYield(divYield) {
-  return divYield ? (divYield * 100).toFixed(2) + '%': '-'; 
+  return divYield ? divYield: '-'; 
 }
 
 export function getPayoutRatio(payoutRatio) {
-  return payoutRatio ? (payoutRatio * 100).toFixed(2) + '%': '-';
+  return payoutRatio ? payoutRatio : '-';
 }
 
 export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
@@ -62,26 +70,31 @@ export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
   return '-';
 }
 
-export function getDivGrowthRate(divHistory, annualPayout) {
-  if (divHistory.length < 20 || !annualPayout) {
-    return '-';
-  }
-
+export function getDivGrowthRate(divHistory) {
   let startingDivAmount = 0;
+  let endingDivAmount = 0;
 
   if(divHistory.length === 20) {
     for(let i = 0; i < 4; i++) {
       startingDivAmount += divHistory[i].value;
     }
+    for (let i = divHistory.length - 4; i < 20; i++){
+      endingDivAmount += divHistory[i].value;
+    }
+    const dividendGrowthRate = ((Math.pow((endingDivAmount / startingDivAmount), 1/5) - 1) * 100).toFixed(2) + '%';
+    return dividendGrowthRate;
   }
 
   if(divHistory.length === 60) {
     for(let i = 0; i < 12; i++) {
       startingDivAmount += divHistory[i].value; 
     }
+    for(let i = divHistory.length - 12; i < 60; i++) {
+      endingDivAmount += divHistory[i].value;
+    }
+    const dividendGrowthRate = ((Math.pow((endingDivAmount / startingDivAmount), 1/5) - 1) * 100).toFixed(2) + '%';
+    return dividendGrowthRate;
   }
 
-  const endingDivAmount = annualPayout;
-  const dividendGrowthRate = ((Math.pow((endingDivAmount / startingDivAmount), 1/5) - 1) * 100).toFixed(2) + '%';
-  return dividendGrowthRate;
+  return '-';
 }
