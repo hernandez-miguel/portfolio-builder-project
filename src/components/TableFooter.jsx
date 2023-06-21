@@ -1,43 +1,37 @@
 import {
   getTotalAllocations,
   getPortfolioDivYield,
-  getPortfolioExpectedReturn,
-  getPortfolioDivGrowth,
+  getPortfolioCAGR,
+  getPortfolioDivGrowthRate,
 } from '../helpers/TableFooter.helper';
 
+import TotalAllocation from './TotalAllocation';
+import PortfolioDivYield from './PortfolioDivYield';
+import PortfolioDivGrowthRate from './PortfolioDivGrowthRate';
+import PortfolioCAGR from './PortfolioCAGR';
+
 export default function TableFooter({ rowData }) {
-  const totalAllocations = getTotalAllocations(rowData);
-
-  const colorChange = (totalAllocations) => {
-    if (totalAllocations > 100) {
-      return (
-        <p>
-          Allocation:
-          <span style={{ color: 'red' }}> {totalAllocations}% </span>
-          of 100%
-        </p>
-      );
-    }
-
-    return <p>Allocation: {totalAllocations}% of 100%</p>;
-  };
+  const totalAllocation = getTotalAllocations(rowData);
+  const portfolioDivYield = getPortfolioDivYield(rowData);
+  const portfolioDivGrowthRate = getPortfolioDivGrowthRate(rowData);
+  const portfolioCAGR = getPortfolioCAGR(rowData);
 
   return (
     <>
       <div className="table-footer">
-        {colorChange(totalAllocations)}
-        <p>
-          Portfolio Dividend Yield:{' '}
-          {totalAllocations === 100 ? getPortfolioDivYield(rowData) : ''}
-        </p>
-        <p>
-          Portfolio Dividend Growth Rate:{' '}
-          {totalAllocations === 100 ? getPortfolioDivGrowth(rowData) : ''}
-        </p>
-        <p>
-          Portfolio CAGR:{' '}
-          {totalAllocations === 100 ? getPortfolioExpectedReturn(rowData) : ''}
-        </p>
+        <TotalAllocation totalAllocation={totalAllocation}/>
+        <PortfolioDivYield 
+          totalAllocation={totalAllocation} 
+          portfolioDivYield={portfolioDivYield}
+        />
+        <PortfolioDivGrowthRate
+          totalAllocation={totalAllocation}
+          portfolioDivGrowthRate={portfolioDivGrowthRate}
+        />
+        <PortfolioCAGR 
+          totalAllocation={totalAllocation}
+          portfolioCAGR={portfolioCAGR}
+        />
       </div>
     </>
   );

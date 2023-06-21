@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import TableRow from './TableRow';
 import TableFooter from './TableFooter.jsx';
 import Modal from './modal';
+import LoadingSpinner from './LoadingSpinner';
 import { getCurrentDate, getHistoricalDate, getDivYield } from '../helpers/Table.helper';
 import { getPayoutRatio, getStartYear, getEndYear } from '../helpers/Table.helper';
 import { get5YCAGR, getDivGrowthRate, errorTypeObj } from '../helpers/Table.helper';
 import { getTotalAllocations } from '../helpers/TableFooter.helper';
-import { Oval } from 'react-loader-spinner';
 
 const date = new Date();
 const currentDate = getCurrentDate(date);
@@ -25,33 +25,6 @@ export default function Table() {
   const [loading, setLoading] = useState(false);
   
   const totalAllocations = getTotalAllocations(rowData);
-
-  function loadingSpinner(loading) {
-    if (loading) {
-      return (
-        <button type="submit">
-          <Oval
-          height={20}
-          width={20}
-          color="white"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-          ariaLabel='oval-loading'
-          secondaryColor="white"
-          strokeWidth={3}
-          strokeWidthSecondary={3}
-          />
-        </button>
-      )
-    }
-  
-    return (
-      <button type="submit">
-        ADD STOCK
-      </button>
-    )
-  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -234,7 +207,7 @@ export default function Table() {
               value={allocation}
               onChange={(ev) => {setAllocation(ev.target.value)}}
             />
-            {loadingSpinner(loading)}
+            < LoadingSpinner loading={loading}/>
           </form>
         </div>
       <div className="table-container">

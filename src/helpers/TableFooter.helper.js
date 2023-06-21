@@ -18,7 +18,7 @@ export function getPortfolioDivYield(rowData) {
   return total.toFixed(2) + '%';
 }
 
-export function getPortfolioExpectedReturn(rowData) {
+export function getPortfolioCAGR(rowData) {
   let total = 0;
   
   for(let i = 0; i < rowData.length; i++) {
@@ -32,7 +32,7 @@ export function getPortfolioExpectedReturn(rowData) {
   return total.toFixed(2) + '%';
 }
 
-export function getPortfolioDivGrowth(rowData) {
+export function getPortfolioDivGrowthRate(rowData) {
   let total = 0;
 
   for (let i = 0; i < rowData.length; i++) {
