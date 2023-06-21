@@ -1,12 +1,12 @@
 export function getTotalAllocations(rowData) {
   let total = 0;
   for (let i = 0; i < rowData.length; i++){
-    total += rowData[i].allocation;
+    total += (rowData[i].allocation * 10);
   }
-  return total;
+  return total / 10;
 }
 
-export function getPortfolioDivyield(rowData) {
+export function getPortfolioDivYield(rowData) {
   let total = 0;
 
   for(let i = 0; i < rowData.length; i++) {

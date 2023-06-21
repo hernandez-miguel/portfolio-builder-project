@@ -61,12 +61,12 @@ export default function TableRow({row, setRowData, assetNum}) {
       </td>
       <td data-cell={dataCelldata[6]}>
         <div className="item-wrapper">
-          {row.change}
+          {row.change.toFixed(2)}
         </div>
       </td>
       <td data-cell={dataCelldata[7]}>
         <div className="item-wrapper">
-          {row.changePercent}
+          {row.changePercent.toFixed(2) + '%'}
         </div>
       </td>
       <td data-cell={dataCelldata[8]}>

@@ -110,6 +110,7 @@ export default function Table() {
       const urlDelayedPrice = `https://eodhistoricaldata.com/api/real-time/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
       const urlDivHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${startYear}&to=${endYear}&period=d&fmt=json&&api_token=${API_KEY}`
       const urlHistoricalPrices = `https://eodhistoricaldata.com/api/eod/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`;
+      const urlDivHistoryCAGR = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`
       
       
       try {
@@ -125,7 +126,9 @@ export default function Table() {
           const thirdResponse = await fetch(urlDivHistory);
           const stockDividendHitory = await thirdResponse.json();
           const fourthResponse = await fetch(urlHistoricalPrices);
-          const stockHistoricalPrices = await fourthResponse.json();   
+          const stockHistoricalPrices = await fourthResponse.json(); 
+          const fifthResponse = await fetch(urlDivHistoryCAGR);
+          const divHistoryCAGR = await fifthResponse.json();  
         
           const lastPrice = stockDelayedPrice.close;
           const change = stockDelayedPrice.change;
@@ -146,9 +149,9 @@ export default function Table() {
                 lastPrice: lastPrice,
                 change: change,
                 changePercent: changePercent,
-                divYield: getDivYield(divYield),
+                divYield: getDivYield(divYield, stockType),
                 payoutRatio: getPayoutRatio(payoutRatio),
-                cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
+                cagr5Years: get5YCAGR(divHistoryCAGR, historicalPrices, lastPrice),
                 divGrowthRate: getDivGrowthRate(divHistory)
               }]);
             });
@@ -166,9 +169,9 @@ export default function Table() {
                 lastPrice: lastPrice,
                 change: change,
                 changePercent: changePercent,
-                divYield: getDivYield(divYield),
+                divYield: getDivYield(divYield, stockType),
                 payoutRatio: '-',
-                cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
+                cagr5Years: get5YCAGR(divHistoryCAGR, historicalPrices, lastPrice),
                 divGrowthRate: getDivGrowthRate(divHistory)
               }]);
             });
@@ -186,9 +189,9 @@ export default function Table() {
                 lastPrice: lastPrice,
                 change: change,
                 changePercent: changePercent,
-                divYield: getDivYield(divYield),
+                divYield: getDivYield(divYield, stockType),
                 payoutRatio: '-',
-                cagr5Years: get5YCAGR(divHistory, historicalPrices, lastPrice),
+                cagr5Years: get5YCAGR(divHistoryCAGR, historicalPrices, lastPrice),
                 divGrowthRate: getDivGrowthRate(divHistory)
               }]);
             });
