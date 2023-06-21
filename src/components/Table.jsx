@@ -218,13 +218,13 @@ export default function Table() {
           <thead>
             <tr>
               <th> </th>
-              <th>Asset #</th>
-              <th>Allocation (%)</th>
+              <th>Asset</th>
+              <th>Allocation(%)</th>
               <th>Ticker Symbol</th>
               <th>Stock Name</th>
-              <th>Last Price (Delayed)</th>
-              <th>Change</th>
-              <th>Change (%)</th>
+              <th>Last Price(Delayed)</th>
+              <th>Price Change</th>
+              <th>Price Change(%)</th>
               <th>Dividend Yield</th>
               <th>Payout Ratio</th>
               <th>5Y Dividend Growth Rate</th>

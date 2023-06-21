@@ -1,3 +1,6 @@
+import PriceChange from "./PriceChange";
+import PriceChangePercent from "./PriceChangePercent";
+
 export default function TableRow({row, setRowData, assetNum}) {
   
   function handleRemoveRow(index) {
@@ -10,13 +13,13 @@ export default function TableRow({row, setRowData, assetNum}) {
 
   const dataCelldata = [
     '',
-    'Asset #:',
-    'Allocation (%):',
+    'Asset:',
+    'Allocation(%):',
     'Ticker Symbol:',
     'Stock Name:',
-    'Last Price (Delayed):',
-    'Change:',
-    'Change (%):',
+    'Last Price(Delayed):',
+    'Price Change:',
+    'Price Change(%):',
     'Dividend Yield:',
     'Payout Ratio:',
     '5Y Dividend Growth Rate:',
@@ -61,12 +64,12 @@ export default function TableRow({row, setRowData, assetNum}) {
       </td>
       <td data-cell={dataCelldata[6]}>
         <div className="item-wrapper">
-          {row.change.toFixed(2)}
+          <PriceChange priceChange={row.change}/>
         </div>
       </td>
       <td data-cell={dataCelldata[7]}>
         <div className="item-wrapper">
-          {row.changePercent.toFixed(2) + '%'}
+          <PriceChangePercent priceChangePercent={row.changePercent}/>
         </div>
       </td>
       <td data-cell={dataCelldata[8]}>

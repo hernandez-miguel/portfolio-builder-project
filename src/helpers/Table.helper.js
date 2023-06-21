@@ -83,6 +83,7 @@ export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
 }
 
 export function getDivGrowthRate(divHistory) {
+  console.log(divHistory);
   if(divHistory.length >= 20) {
     let startingDivAmount = 0;
     let endingDivAmount = 0;
