@@ -19,7 +19,6 @@ table {
 
 .table-container {
   overflow-x: auto;
-  position: relative;
 }
 
 .input-container {
@@ -97,7 +96,6 @@ button {
 
 th {
   background-color: hsl(0 0% 0% / 0.5);
-  text-align: center;
 }
 
 tr:nth-of-type(2n) {
@@ -140,5 +138,17 @@ tr:nth-of-type(2n) {
     font-weight: 700;
     justify-self: start;
     text-align: left;
+  }
+
+  .table-footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-content-item {
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: .95rem;
+    width: 75%;
   }
 } 
