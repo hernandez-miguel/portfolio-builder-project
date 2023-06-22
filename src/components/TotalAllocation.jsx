@@ -1,13 +1,20 @@
 export default function TotalAllocation({totalAllocation}) {
   if (totalAllocation > 100) {
     return (
-      <p>
-        Total Allocation:
-        <span style={{ color: 'red' }}> {totalAllocation}% </span>
-        of 100%
-      </p>
+      <div className="footer-content-item">
+        <p>Total Allocation:</p>
+        <p>
+          <span style={{ color: 'red' }}>{totalAllocation}% </span>
+          of 100%
+        </p>
+      </div>
     );
   }
 
-  return <p>Total Allocation: {totalAllocation}% of 100%</p>;
+  return (
+    <div className="footer-content-item">
+      <p>Total Allocation:</p>
+      <p>{`${totalAllocation}% of 100%`}</p>
+    </div>
+  )
 }

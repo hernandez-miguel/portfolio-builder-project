@@ -19,19 +19,21 @@ export default function TableFooter({ rowData }) {
   return (
     <>
       <div className="table-footer">
-        <TotalAllocation totalAllocation={totalAllocation}/>
-        <PortfolioDivYield 
-          totalAllocation={totalAllocation} 
-          portfolioDivYield={portfolioDivYield}
-        />
-        <PortfolioDivGrowthRate
-          totalAllocation={totalAllocation}
-          portfolioDivGrowthRate={portfolioDivGrowthRate}
-        />
-        <PortfolioCAGR 
-          totalAllocation={totalAllocation}
-          portfolioCAGR={portfolioCAGR}
-        />
+        <div className="table-footer-content">
+          <TotalAllocation totalAllocation={totalAllocation}/>
+          <PortfolioDivYield 
+            totalAllocation={totalAllocation} 
+            portfolioDivYield={portfolioDivYield}
+          />
+          <PortfolioDivGrowthRate
+            totalAllocation={totalAllocation}
+            portfolioDivGrowthRate={portfolioDivGrowthRate}
+          />
+          <PortfolioCAGR 
+            totalAllocation={totalAllocation}
+            portfolioCAGR={portfolioCAGR}
+          />
+        </div>
       </div>
     </>
   );
