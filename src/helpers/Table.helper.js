@@ -83,15 +83,14 @@ export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
 }
 
 export function getDivGrowthRate(divHistory) {
-  console.log(divHistory);
-  if(divHistory.length >= 20) {
+  const date = new Date();
+  const startYear = String(date.getFullYear() - 5);
+  const endYear = String(date.getFullYear() - 1);
+
+  if(divHistory[0].date.slice(0, 4) === startYear) {
     let startingDivAmount = 0;
     let endingDivAmount = 0;
-
-    const date = new Date();
-    const startYear = String(date.getFullYear() - 5);
-    const endYear = String(date.getFullYear() - 1);
-
+  
     for(let i = 0; i < divHistory.length; i++) {
       if(divHistory[i].date.slice(0, 4) === startYear) {
         startingDivAmount += divHistory[i].value;
