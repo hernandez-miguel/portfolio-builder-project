@@ -95,20 +95,22 @@ export default function Table() {
         
         if (stockName) {
           const secondResponse = await fetch(urlDelayedPrice);
-          const stockDelayedPrice = await secondResponse.json();
           const thirdResponse = await fetch(urlDivHistory);
-          const stockDividendHitory = await thirdResponse.json();
           const fourthResponse = await fetch(urlHistoricalPrices);
-          const stockHistoricalPrices = await fourthResponse.json(); 
           const fifthResponse = await fetch(urlDivHistoryCAGR);
+          
+          const stockDelayedPrice = await secondResponse.json();
+          const stockDividendHitory = await thirdResponse.json();
+          const stockHistoricalPrices = await fourthResponse.json(); 
           const divHistoryCAGR = await fifthResponse.json();  
-        
+          
           const lastPrice = stockDelayedPrice.close;
           const change = stockDelayedPrice.change;
           const changePercent = stockDelayedPrice.change_p;
           const divHistory = stockDividendHitory;
-          const historicalPrices = stockHistoricalPrices
-
+          const historicalPrices = stockHistoricalPrices;
+          
+          
           if(stockType === 'Common Stock') {
             const divYield = stockFundamentalData.SplitsDividends.ForwardAnnualDividendYield;
             const payoutRatio = stockFundamentalData.SplitsDividends.PayoutRatio;
@@ -219,7 +221,7 @@ export default function Table() {
             <tr>
               <th> </th>
               <th>Asset</th>
-              <th>Allocation(%)</th>
+              <th>Allocation</th>
               <th>Ticker Symbol</th>
               <th>Stock Name</th>
               <th>Last Price(Delayed)</th>

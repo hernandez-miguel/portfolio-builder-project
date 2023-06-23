@@ -14,7 +14,7 @@ export default function TableRow({row, setRowData, assetNum}) {
   const dataCelldata = [
     '',
     'Asset:',
-    'Allocation(%):',
+    'Allocation:',
     'Ticker Symbol:',
     'Stock Name:',
     'Last Price(Delayed):',
