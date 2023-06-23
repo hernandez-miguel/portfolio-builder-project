@@ -1,16 +1,8 @@
-export default function PortfolioCAGR({totalAllocation, portfolioCAGR}) {
-  if (totalAllocation === 100) {
-    return (
-      <div className="footer-content-item">
-        <p>Portfolio CAGR:</p>
-        <p>{portfolioCAGR}</p>
-      </div>
-    )
-  }
-
+export default function PortfolioCAGR({portfolioCAGR}) {
   return (
     <div className="footer-content-item">
       <p>Portfolio CAGR:</p>
+      <p>{portfolioCAGR}</p>
     </div>
   )
 }

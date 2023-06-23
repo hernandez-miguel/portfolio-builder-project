@@ -34,8 +34,7 @@ table {
 .table-footer-content {
   width: 100%;
   display: flex;
-  justify-content: space-around;
-  align-items: start;
+  justify-content: space-between;
 }
 
 .footer-content-item {
