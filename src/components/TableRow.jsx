@@ -17,79 +17,79 @@ export default function TableRow({row, setRowData, assetNum}) {
     'Allocation:',
     'Ticker Symbol:',
     'Stock Name:',
-    'Last Price(Delayed):',
+    'Last Price:',
     'Price Change:',
     'Price Change(%):',
     'Dividend Yield:',
     'Payout Ratio:',
-    '5Y Dividend Growth Rate:',
+    '5Y Div. Growth Rate:',
     '5Y CAGR:',
   ];
 
   return (
     <tr>
       <td>
-        <div className="item-wrapper">
-          <div className="remove-button">
-            <button onClick={() => handleRemoveRow(assetNum - 1)}>
-              REMOVE
-            </button>
-          </div>
+        <div className="remove-button">
+          <button onClick={() => handleRemoveRow(assetNum - 1)}>
+            REMOVE
+          </button>
         </div>
       </td>
       <td data-cell={dataCelldata[1]}>
         <div className="item-wrapper">
-          {assetNum}
+          <p>{assetNum}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[2]}>
         <div className="item-wrapper">
-          {row.allocation.toFixed(2) + '%'}
+          <p>{row.allocation.toFixed(2) + '%'}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[3]}>
         <div className="item-wrapper">
-          {row.ticker.toUpperCase()}
+          <p>{row.ticker.toUpperCase()}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[4]}>
         <div className="item-wrapper" id="stockName">
-          {row.name}
+          <p>{row.name}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[5]}>
         <div className="item-wrapper">
-          {'$' + row.lastPrice.toFixed(2)}
+          <p>{'$' + row.lastPrice.toFixed(2)}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[6]}>
         <div className="item-wrapper">
-          <PriceChange priceChange={row.change}/>
+          <p><PriceChange priceChange={row.change}/></p>
         </div>
       </td>
       <td data-cell={dataCelldata[7]}>
         <div className="item-wrapper">
-          <PriceChangePercent priceChangePercent={row.changePercent}/>
+          <p>
+            <PriceChangePercent priceChangePercent={row.changePercent}/>
+          </p>
         </div>
       </td>
       <td data-cell={dataCelldata[8]}>
         <div className="item-wrapper">
-          {row.divYield}
+          <p>{row.divYield}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[9]}>
         <div className="item-wrapper">
-          {row.payoutRatio}
+          <p>{row.payoutRatio}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[10]}>
         <div className="item-wrapper">
-          {row.divGrowthRate}
+          <p>{row.divGrowthRate}</p>
         </div>
       </td>
       <td data-cell={dataCelldata[11]}>
         <div className="item-wrapper">
-          {row.cagr5Years}
+          <p>{row.cagr5Years}</p>
         </div>
       </td>
     </tr>

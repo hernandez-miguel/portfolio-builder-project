@@ -87,7 +87,7 @@ export function getDivGrowthRate(divHistory) {
   const startYear = String(date.getFullYear() - 5);
   const endYear = String(date.getFullYear() - 1);
 
-  if(divHistory[0].date.slice(0, 4) === startYear) {
+  if(divHistory.length > 0 && divHistory[0].date.slice(0, 4) === startYear) {
     let startingDivAmount = 0;
     let endingDivAmount = 0;
   

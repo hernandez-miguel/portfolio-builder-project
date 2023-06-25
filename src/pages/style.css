@@ -1,4 +1,6 @@
-html {color-scheme: dark}
+html {
+  color-scheme: dark;
+}
 
 body {
   color: #eee;
@@ -22,11 +24,13 @@ table {
 }
 
 .input-container {
-  max-width: 600px;
   margin: 0 auto;
 }
 
 .input-container > form {
+  margin: 0 auto;
+  max-width: 400px;
+  height: 30px;
   display: flex;
   justify-content: space-evenly;
 }
@@ -53,13 +57,13 @@ table {
 }
 
 input {
-  width: 150px;
-  height: 25px;
+  width: 100px;
   text-align: center;
   text-transform: uppercase;
   border: none;
   font-weight: 700;
   background-color: #323232;
+  font-size: .75rem;
 }
 
 input:focus{
@@ -81,17 +85,18 @@ caption {
 button {
   background: #D21312;
   border: none;
-  height: 25px;
-  width: 20%;
+  width: 25%;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 700;
+  font-size: .75rem;
 }
 
 .remove-button > button{
-  width: 100%;
+  width: 175px;
+  height: 30px;
 }
 
 th {
@@ -102,20 +107,16 @@ tr:nth-of-type(2n) {
   background: hsl(0 0% 0% / 0.1);;
 }
 
+#stockName {
+  min-width: 150px;
+}
+
 @media (max-width: 650px) {
   th {
     display: none;
   }
 
-  .item-wrapper {
-    min-width: 220px;
-    min-height: 30px;
-  }
-
-  #stockName {
-    max-width: 220px;
-  }
-
+  
   td {
     display: grid;
     justify-content: center;
@@ -123,26 +124,34 @@ tr:nth-of-type(2n) {
     grid-template-columns: 20ch auto;
     padding: 0.5rem 1rem;
   }
-
+  
   td:first-child {
     padding-top: 2rem;
   }
-
+  
   td:last-child {
     padding-bottom: 2rem;
     content: none;
   }
-
+  
   td::before {
     content: attr(data-cell);
     font-weight: 700;
     justify-self: start;
     text-align: left;
   }
+  
+  .item-wrapper {
+    min-width: 175px;
+    min-height: 30px;
+  }
+
+  #stockName {
+  max-width: 175px;
+}
 
   .table-footer-content {
     flex-direction: column;
-    align-items: center;
   }
 
   .footer-content-item {
@@ -151,3 +160,13 @@ tr:nth-of-type(2n) {
     min-width: 100%;
   }
 } 
+
+@media (max-width: 450px) {
+  caption {
+    font-size: .50rem;
+  }
+  
+  td {
+    grid-template-columns: 15ch auto;
+  }
+}

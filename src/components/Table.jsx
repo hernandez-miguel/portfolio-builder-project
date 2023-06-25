@@ -224,7 +224,7 @@ export default function Table() {
               <th>Allocation</th>
               <th>Ticker Symbol</th>
               <th>Stock Name</th>
-              <th>Last Price(Delayed)</th>
+              <th>Last Price</th>
               <th>Price Change</th>
               <th>Price Change(%)</th>
               <th>Dividend Yield</th>

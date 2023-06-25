@@ -23,21 +23,15 @@ export default function TableFooter({ rowData }) {
           <TotalAllocation 
             totalAllocation={totalAllocation}
           />
-          {totalAllocation === 100 &&
-            <PortfolioDivYield 
-              portfolioDivYield={portfolioDivYield}
-            />
-          }
-          {totalAllocation === 100 &&
-            <PortfolioDivGrowthRate
-              portfolioDivGrowthRate={portfolioDivGrowthRate}
-            />
-          }
-          {totalAllocation === 100 &&
-            <PortfolioCAGR 
-              portfolioCAGR={portfolioCAGR}
-            />
-          }
+          <PortfolioDivYield 
+            portfolioDivYield={portfolioDivYield}
+          />
+          <PortfolioDivGrowthRate
+            portfolioDivGrowthRate={portfolioDivGrowthRate}
+          />
+          <PortfolioCAGR 
+            portfolioCAGR={portfolioCAGR}
+          />
         </div>
       </div>
     </>
