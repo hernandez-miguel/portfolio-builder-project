@@ -60,19 +60,11 @@ export function getPayoutRatio(payoutRatio) {
   return payoutRatio ? (payoutRatio * 100).toFixed(2) + '%' : '-';
 }
 
-export function get5YCAGR(divHistory, historicalPrices, lastPrice) {
-  if (divHistory.length >= 20 && historicalPrices.length >= 1250) {
-    const totalDivRecieved = divHistory.reduce((acc, currentValue) => {
-    return acc += currentValue.value; 
-    }, 0)
-
-    const startPrice = historicalPrices[0].adjusted_close;
-    const endPrice = lastPrice + totalDivRecieved;
-    const annualizedRoR = ((Math.pow((endPrice / startPrice), 1/5) - 1) * 100).toFixed(2) + '%';
-    return annualizedRoR;
-  } 
-
+export function get5YCAGR(historicalPrices) {
   if (historicalPrices.length >= 1250) {
+    /*Adjusted close is the closing price after adjustments 
+    for all applicable splits and dividend distributions*/
+    const lastPrice = historicalPrices[historicalPrices.length - 1].adjusted_close;
     const startPrice = historicalPrices[0].adjusted_close;
     const endPrice = lastPrice;
     const annualizedRoR = ((Math.pow((endPrice / startPrice), 1/5) - 1) * 100).toFixed(2) + '%';
