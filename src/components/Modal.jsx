@@ -16,7 +16,11 @@ export default function Modal({errorType, setErrorType, setShowModal}) {
 
   function errorMessage(errorTypeObj){
     if(errorTypeObj.tickerNotFound) {
-      return <p>Ticker symbol not found</p>
+      return (
+        <p>
+          Ticker symbol not found or has been delisted
+        </p>
+      )
     }
     if(errorTypeObj.overMaximumAllocation) {
       return (

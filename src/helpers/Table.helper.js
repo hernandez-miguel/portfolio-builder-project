@@ -60,6 +60,18 @@ export function getPayoutRatio(payoutRatio) {
   return payoutRatio ? (payoutRatio * 100).toFixed(2) + '%' : '-';
 }
 
+export function getTotalReturn(historicalPrices) {
+  if(historicalPrices.length >= 1250) {
+    const endPrice = historicalPrices[historicalPrices.length - 1].adjusted_close;
+    const startPrice = historicalPrices[0].adjusted_close;
+
+    const totalReturn = (((endPrice - startPrice) / startPrice) * 100).toFixed(2) + '%';
+    return totalReturn;
+  }
+
+  return '-';
+}
+
 export function get5YCAGR(historicalPrices) {
   if (historicalPrices.length >= 1250) {
     /*Adjusted close is the closing price after adjustments 
@@ -75,8 +87,9 @@ export function get5YCAGR(historicalPrices) {
 }
 
 export function getDivGrowthRate(divHistory) {
+  console.log(divHistory);
   const date = new Date();
-  const startYear = String(date.getFullYear() - 5);
+  const startYear = String(date.getFullYear() - 6);
   const endYear = String(date.getFullYear() - 1);
 
   if(divHistory.length > 0 && divHistory[0].date.slice(0, 4) === startYear) {

@@ -6,12 +6,13 @@ import LoadingSpinner from './LoadingSpinner';
 import { getCurrentDate, getHistoricalDate, getDivYield } from '../helpers/Table.helper';
 import { getPayoutRatio, getStartYear, getEndYear } from '../helpers/Table.helper';
 import { get5YCAGR, getDivGrowthRate, errorTypeObj } from '../helpers/Table.helper';
-import { getTotalAllocations } from '../helpers/TableFooter.helper';
+import { getTotalReturn } from '../helpers/Table.helper';
+import { getTotalAllocations} from '../helpers/TableFooter.helper';
 
 const date = new Date();
 const currentDate = getCurrentDate(date);
 const historicalDate = getHistoricalDate(date, 5);
-const startYear = getStartYear(date, 5);
+const startYear = getStartYear(date, 6);
 const endYear = getEndYear(date);
 
 export default function Table() {
@@ -88,26 +89,25 @@ export default function Table() {
       try {
         const firstResponse = await fetch(urlFundamentalData);
         const stockFundamentalData = await firstResponse.json();
-   
+      
         const stockName = stockFundamentalData.General.Name;
         const stockType =  stockFundamentalData.General.Type;
         
-        if (stockName) {
-          const secondResponse = await fetch(urlDelayedPrice);
+        const secondResponse = await fetch(urlDelayedPrice);
+        const stockDelayedPrice = await secondResponse.json();
+        const lastPrice = stockDelayedPrice.close;
+        
+        if (stockName && lastPrice !== 'NA') {
           const thirdResponse = await fetch(urlDivHistory);
           const fourthResponse = await fetch(urlHistoricalPrices);
           
-          const stockDelayedPrice = await secondResponse.json();
           const stockDividendHitory = await thirdResponse.json();
           const stockHistoricalPrices = await fourthResponse.json(); 
           
-          const lastPrice = stockDelayedPrice.close;
-          const change = stockDelayedPrice.change;
-          const changePercent = stockDelayedPrice.change_p;
           const divHistory = stockDividendHitory;
           const historicalPrices = stockHistoricalPrices;
           
-          
+          console.log(historicalPrices);
           if(stockType === 'Common Stock') {
             const divYield = stockFundamentalData.SplitsDividends.ForwardAnnualDividendYield;
             const payoutRatio = stockFundamentalData.SplitsDividends.PayoutRatio;
@@ -119,10 +119,9 @@ export default function Table() {
                 allocation: Number(allocation),
                 name: stockName,
                 lastPrice: lastPrice,
-                change: change,
-                changePercent: changePercent,
                 divYield: getDivYield(divYield, stockType),
                 payoutRatio: getPayoutRatio(payoutRatio),
+                totalReturn: getTotalReturn(historicalPrices),
                 cagr5Years: get5YCAGR(historicalPrices),
                 divGrowthRate: getDivGrowthRate(divHistory)
               }]);
@@ -139,10 +138,9 @@ export default function Table() {
                 allocation: Number(allocation),
                 name: stockName,
                 lastPrice: lastPrice,
-                change: change,
-                changePercent: changePercent,
                 divYield: getDivYield(divYield, stockType),
                 payoutRatio: '-',
+                totalReturn: getTotalReturn(historicalPrices),
                 cagr5Years: get5YCAGR(historicalPrices),
                 divGrowthRate: getDivGrowthRate(divHistory)
               }]);
@@ -159,23 +157,23 @@ export default function Table() {
                 allocation: Number(allocation),
                 name: stockName,
                 lastPrice: lastPrice,
-                change: change,
-                changePercent: changePercent,
                 divYield: getDivYield(divYield, stockType),
+                totalReturn: getTotalReturn(historicalPrices),
                 payoutRatio: '-',
                 cagr5Years: get5YCAGR(historicalPrices),
                 divGrowthRate: getDivGrowthRate(divHistory)
               }]);
             });
           }
+        } else {
+          setShowModal(true);
+          setErrorType((prevData) => ({
+            ...prevData,
+            tickerNotFound: true,
+          }))
+          throw new Error ('Ticker not found');
         }
       } catch (err) {
-        setShowModal(true);
-        setErrorType((prevData) => ({
-          ...prevData,
-          tickerNotFound: true,
-        }))
-        console.log(`Ticker symbol ${ticker} not found.`)
         console.error(err);
       }
       setLoading(false);
@@ -187,46 +185,47 @@ export default function Table() {
   return (
     <>
       <h1>Stock Portfolio Builder</h1>
-        <div className="input-container">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="stockTickerInput"
-              id="stockTickerInput"
-              placeholder='Ticker Symbol'
-              value={ticker}
-              onChange={(ev) => {setTicker(ev.target.value)}}
-            />
-            <input
-              type='number'
-              step={0.01}
-              name="allocationInput"
-              id="allocationInput"
-              placeholder='Allocation'
-              value={allocation}
-              onChange={(ev) => {setAllocation(ev.target.value)}}
-            />
-            < LoadingSpinner loading={loading}/>
-          </form>
-        </div>
+      <div className="input-container">
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="stockTickerInput"
+            id="stockTickerInput"
+            placeholder='Ticker'
+            value={ticker}
+            onChange={(ev) => {setTicker(ev.target.value)}}
+          />
+          <input
+            type='number'
+            step={0.01}
+            name="allocationInput"
+            id="allocationInput"
+            placeholder='Allocation'
+            value={allocation}
+            onChange={(ev) => {setAllocation(ev.target.value)}}
+          />
+          < LoadingSpinner loading={loading}/>
+        </form>
+      </div>
+      <div className='disclaimer-container'>
+        <p>
+          Disclaimer: Past Performance is Not Indicative of Future Results
+        </p>
+      </div>
       <div className="table-container">
         <table>
-          <caption>
-            Disclaimer: Past Performance is Not Indicative of Future Results
-          </caption>
           <thead>
             <tr>
               <th> </th>
               <th>Asset</th>
-              <th>Allocation</th>
-              <th>Ticker Symbol</th>
-              <th>Stock Name</th>
+              <th>Allocation(%)</th>
+              <th>Ticker</th>
+              <th>Name</th>
               <th>Last Price</th>
-              <th>Price Change</th>
-              <th>Price Change(%)</th>
-              <th>Dividend Yield</th>
+              <th>Div. Yield</th>
               <th>Payout Ratio</th>
-              <th>5Y Dividend Growth Rate</th>
+              <th>5Y Total Return</th>
+              <th>5Y DGR</th>
               <th>5Y CAGR</th>
             </tr>
           </thead>
