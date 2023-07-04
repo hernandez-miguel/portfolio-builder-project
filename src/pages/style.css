@@ -103,6 +103,7 @@ button {
   align-items: center;
   font-weight: 700;
   font-size: .75rem;
+  color: white;
 }
 
 .remove-button > button{
