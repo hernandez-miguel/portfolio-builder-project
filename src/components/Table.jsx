@@ -35,6 +35,16 @@ export default function Table() {
     setTicker('');
     setAllocation('');
 
+    if(!ticker || !allocation) {
+      setLoading(false)
+      setShowModal(true);
+      setErrorType((prevData) => ({
+        ...prevData,
+        emptyInputs: true,
+      }))
+      return;
+    }
+
     if(Number(allocation) <= 0 || Number(allocation) > 100) {
       setLoading(false)
       setShowModal(true);
@@ -45,16 +55,6 @@ export default function Table() {
       return;
     }
 
-    if(!ticker || !allocation) {
-      setLoading(false)
-      setShowModal(true);
-      setErrorType((prevData) => ({
-        ...prevData,
-        emptyInputs: true,
-      }))
-      return;
-    }
-    
     if (totalAllocations >= 100) {
       setLoading(false)
       setShowModal(true);
