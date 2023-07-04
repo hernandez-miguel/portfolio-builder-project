@@ -82,7 +82,7 @@ th, td, caption {
 
 .disclaimer-container {
   background: hsl(0 0% 0%);
-  font-size: .65rem;
+  font-size: .55rem;
   font-weight: 700;
   text-transform: uppercase;
   text-align: left;
@@ -127,7 +127,6 @@ tr:nth-of-type(2n) {
   th {
     display: none;
   }
-
   
   td {
     display: grid;
