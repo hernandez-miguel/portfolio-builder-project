@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import TableRow from './TableRow';
 import TableFooter from './TableFooter.jsx';
-import Modal from './modal';
+import Modal from './Modal';
 import LoadingSpinner from './LoadingSpinner';
 import { getCurrentDate, getHistoricalDate, getDivYield } from '../helpers/Table.helper';
 import { getPayoutRatio, getStartYear, getEndYear } from '../helpers/Table.helper';
@@ -84,9 +84,6 @@ export default function Table() {
       const urlDelayedPrice = `https://eodhistoricaldata.com/api/real-time/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
       const urlDgrHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${startYear}&to=${endYear}&period=d&fmt=json&&api_token=${API_KEY}`
       const urlHistoricalPrices = `https://eodhistoricaldata.com/api/eod/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`;
-      
-
-      
       
       try {
         const firstResponse = await fetch(urlFundamentalData);
