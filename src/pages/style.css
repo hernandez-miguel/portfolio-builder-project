@@ -109,6 +109,7 @@ button {
 .remove-button > button{
   min-width: 150px;
   min-height: 30px;
+  color: white;
 }
 
 th {
