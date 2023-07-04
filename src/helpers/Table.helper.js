@@ -5,7 +5,8 @@ export const errorTypeObj = {
   overMaximumAllocation: false,
   emptyInputs: false,
   notInRange: false,
-  duplicates: false
+  duplicates: false,
+  failedFetch: false,
 }
 
 export function getCurrentDate(date){
@@ -49,10 +50,6 @@ export function getDivYield(divYield, stockType) {
     return Number(divYield).toFixed(2) + '%';
   }
 
-  if(divYield && stockType === 'FUND') {
-    return (Number(divYield) * 100).toFixed(2) + '%';
-  }
-
   return '-';
 }
 
@@ -87,7 +84,6 @@ export function get5YCAGR(historicalPrices) {
 }
 
 export function getDivGrowthRate(divHistory) {
-  console.log(divHistory);
   const date = new Date();
   const startYear = String(date.getFullYear() - 6);
   const endYear = String(date.getFullYear() - 1);

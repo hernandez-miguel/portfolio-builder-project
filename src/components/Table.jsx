@@ -35,7 +35,7 @@ export default function Table() {
     setTicker('');
     setAllocation('');
 
-    if(Number(allocation) < 0 || Number(allocation) > 100) {
+    if(Number(allocation) <= 0 || Number(allocation) > 100) {
       setLoading(false)
       setShowModal(true);
       setErrorType((prevData) => ({
@@ -82,8 +82,10 @@ export default function Table() {
     async function getStockData(tickerSymbol) {
       const urlFundamentalData = `https://eodhistoricaldata.com/api/fundamentals/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
       const urlDelayedPrice = `https://eodhistoricaldata.com/api/real-time/${tickerSymbol}.US?fmt=json&&api_token=${API_KEY}`;
-      const urlDivHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${startYear}&to=${endYear}&period=d&fmt=json&&api_token=${API_KEY}`
+      const urlDgrHistory = `https://eodhistoricaldata.com/api/div/${tickerSymbol}.US?from=${startYear}&to=${endYear}&period=d&fmt=json&&api_token=${API_KEY}`
       const urlHistoricalPrices = `https://eodhistoricaldata.com/api/eod/${tickerSymbol}.US?from=${historicalDate}&to=${currentDate}&period=d&fmt=json&&api_token=${API_KEY}`;
+      
+
       
       
       try {
@@ -98,16 +100,12 @@ export default function Table() {
         const lastPrice = stockDelayedPrice.close;
         
         if (stockName && lastPrice !== 'NA') {
-          const thirdResponse = await fetch(urlDivHistory);
+          const thirdResponse = await fetch(urlDgrHistory);
           const fourthResponse = await fetch(urlHistoricalPrices);
           
-          const stockDividendHitory = await thirdResponse.json();
-          const stockHistoricalPrices = await fourthResponse.json(); 
-          
-          const divHistory = stockDividendHitory;
-          const historicalPrices = stockHistoricalPrices;
-          
-          console.log(historicalPrices);
+          const dgrHistory = await thirdResponse.json();
+          const historicalPrices = await fourthResponse.json(); 
+        
           if(stockType === 'Common Stock') {
             const divYield = stockFundamentalData.SplitsDividends.ForwardAnnualDividendYield;
             const payoutRatio = stockFundamentalData.SplitsDividends.PayoutRatio;
@@ -123,7 +121,7 @@ export default function Table() {
                 payoutRatio: getPayoutRatio(payoutRatio),
                 totalReturn: getTotalReturn(historicalPrices),
                 cagr5Years: get5YCAGR(historicalPrices),
-                divGrowthRate: getDivGrowthRate(divHistory)
+                divGrowthRate: getDivGrowthRate(dgrHistory)
               }]);
             });
           }
@@ -142,13 +140,12 @@ export default function Table() {
                 payoutRatio: '-',
                 totalReturn: getTotalReturn(historicalPrices),
                 cagr5Years: get5YCAGR(historicalPrices),
-                divGrowthRate: getDivGrowthRate(divHistory)
+                divGrowthRate: getDivGrowthRate(dgrHistory)
               }]);
             });
           }
           
           if(stockType === 'FUND') {
-            const divYield = stockFundamentalData.MutualFund_Data.Yield;
 
             setRowData((prevData) => {
               const copyState = [...prevData];
@@ -157,11 +154,11 @@ export default function Table() {
                 allocation: Number(allocation),
                 name: stockName,
                 lastPrice: lastPrice,
-                divYield: getDivYield(divYield, stockType),
+                divYield: '-',
                 totalReturn: getTotalReturn(historicalPrices),
                 payoutRatio: '-',
                 cagr5Years: get5YCAGR(historicalPrices),
-                divGrowthRate: getDivGrowthRate(divHistory)
+                divGrowthRate: getDivGrowthRate(dgrHistory)
               }]);
             });
           }
@@ -174,6 +171,11 @@ export default function Table() {
           throw new Error ('Ticker not found');
         }
       } catch (err) {
+        setShowModal(true);
+        setErrorType((prevData) => ({
+          ...prevData,
+          failedFetch: true,
+        }))
         console.error(err);
       }
       setLoading(false);
@@ -214,21 +216,23 @@ export default function Table() {
       </div>
       <div className="table-container">
         <table>
-          <thead>
-            <tr>
-              <th> </th>
-              <th>Asset</th>
-              <th>Allocation(%)</th>
-              <th>Ticker</th>
-              <th>Name</th>
-              <th>Last Price</th>
-              <th>Div. Yield</th>
-              <th>Payout Ratio</th>
-              <th>5Y Total Return</th>
-              <th>5Y DGR</th>
-              <th>5Y CAGR</th>
-            </tr>
-          </thead>
+          {rowData.length > 0 && 
+            <thead>
+              <tr>
+                <th> </th>
+                <th>Asset</th>
+                <th>Allocation(%)</th>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Last Price</th>
+                <th>Div. Yield</th>
+                <th>Payout Ratio</th>
+                <th>5Y Total Return</th>
+                <th>5Y DGR</th>
+                <th>5Y CAGR</th>
+              </tr>
+            </thead>
+          }
           <tbody>
             {rowData.map((row, rowIndex) => {
               return (

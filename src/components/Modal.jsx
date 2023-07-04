@@ -11,6 +11,7 @@ export default function Modal({errorType, setErrorType, setShowModal}) {
       emptyInputs: false,
       notInRange: false,
       duplicates: false,
+      failedFetch: false,
     }))
   }
 
@@ -33,10 +34,13 @@ export default function Modal({errorType, setErrorType, setShowModal}) {
       return <p>Ticker symbol and allocation must be filled out</p>
     }
     if(errorTypeObj.notInRange) {
-      return <p>Please enter a number between 1-100</p>
+      return <p>Please enter a number between 0-100</p>
     }
     if(errorTypeObj.duplicates) {
       return <p>Ticker is already in list</p>
+    }
+    if(errorTypeObj.failedFetch) {
+      return <p>Failed to fetch data</p>
     }
   }
 
