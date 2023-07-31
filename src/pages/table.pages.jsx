@@ -1,5 +1,5 @@
 import Table from '../components/Table.jsx';
-import './style.css';
+import '../styles/style.css';
 
 function TablePage() {
   return (

@@ -1,5 +1,4 @@
 import TablePage from './pages/table.pages';
-import './App.css';
 
 function App() {
   return (
