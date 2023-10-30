@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import TableRow from './TableRow';
 import TableFooter from './TableFooter.jsx';
 import Modal from './Modal';
